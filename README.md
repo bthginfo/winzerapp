@@ -5,11 +5,13 @@ Technische Projektbasis für eine mandantenfähige Winzer-App gemäß [Produktsp
 ## Aktueller Umfang
 
 - Startfähiges SvelteKit-/TypeScript-Monorepo mit Vercel-Adapter, Frankfurt als Funktionsregion.
+- Bereitgestellt unter https://winzerapp.vercel.app (Vercel-Anmeldung gemäß Projekteinstellung).
+- Neon PostgreSQL **Free** in Frankfurt, mit Production und Development verbunden; serverseitige Verbindungsprüfung unter `/api/health`.
 - Responsives Cuvée-Studio mit synthetischen Quellen A/B, Dezimalrechnung, Bestandsprüfung, 250-ml-Versuchsplanung und JSON-Export.
 - Mengen, Alkoholschätzung und reine Weinkosten; keine pH-, SO₂- oder Geschmacksprognose.
 - Deutsche Produktspezifikation, SQL-Grundlage für Mandanten und dokumentierter Ausbau.
 
-**Dies ist die erste Projektbasis, kein fertiges Produktions-MVP.** Kein produktiver Login, keine Bestandsbuchung, keine aktive Datenbankverbindung, keine Offline-Synchronisierung und keine echten ERP-/KI-Integrationen. Die Oberfläche kennzeichnet Beispieldaten ausdrücklich. Browser-Eingaben werden nicht dauerhaft gespeichert. Exportdaten sind Planungen, keine freigegebenen Produktionsrezepte.
+**Dies ist die erste Projektbasis, kein fertiges Produktions-MVP.** Kein produktiver App-Login, keine Bestandsbuchung, keine Offline-Synchronisierung und keine echten ERP-/KI-Integrationen. Die Datenbank ist für den weiteren Ausbau eingerichtet; die Cuvée-Planung verwendet weiterhin ausdrücklich gekennzeichnete Beispieldaten. Browser-Eingaben werden nicht dauerhaft gespeichert. Exportdaten sind Planungen, keine freigegebenen Produktionsrezepte.
 
 ## Lokal starten
 
@@ -24,7 +26,7 @@ pnpm build
 pnpm dev
 ```
 
-Die aktuelle Planungsoberfläche benötigt keine Secrets und keine Datenbank. Für spätere Servermodule `.env.example` verwenden; Zugangsdaten niemals committen. Einrichten der Datenbank und Authentifizierung: [Deployment-Anleitung](docs/deployment.md).
+Die Planungsoberfläche benötigt keine Secrets. Die Verbindungsprüfung benötigt serverseitig `DATABASE_URL`; ohne diese Variable liefert sie kontrolliert HTTP 503. Für lokale DB-Prüfung Development-Variablen aus Vercel beziehen; Zugangsdaten niemals committen. Einrichtung und Authentifizierung: [Deployment-Anleitung](docs/deployment.md).
 
 ## Struktur
 

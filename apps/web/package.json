@@ -8,7 +8,10 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
   },
-  "dependencies": { "@vinea/domain": "workspace:*" },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.2.0",
+    "@vinea/domain": "workspace:*"
+  },
   "devDependencies": {
     "@sveltejs/adapter-vercel": "^6.3.0",
     "@sveltejs/kit": "^2.0.0",

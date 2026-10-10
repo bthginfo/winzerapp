@@ -4,11 +4,13 @@
 
 GitHub-Repository `winzerapp` importieren. Framework **SvelteKit**, Root Directory **apps/web**, Node.js **22.x**. Zugriff auf Workspace-Dateien außerhalb der Root Directory zulassen. Mit pnpm aus dem Repository-Lockfile installieren. Der Vercel-Adapter baut Node-Funktionen für Frankfurt (`fra1`). Keine kostenpflichtigen Build-Maschinen oder Add-ons aktivieren.
 
-Das erste Deployment benötigt keine Umgebungsvariablen, weil es nur synthetische Planungsdaten verarbeitet. Ein erreichbares Webprojekt beweist noch keine PostgreSQL-Verbindung.
+Die Planungsoberfläche benötigt keine Umgebungsvariablen. `/api/health` prüft mit dem serverseitigen `DATABASE_URL` die PostgreSQL-Verbindung und liefert bei Erfolg `{ "status": "ok", "database": "connected" }`; sonst HTTP 503 ohne technische Fehlerdetails.
 
 ## Neon Free
 
-In Vercel Storage / Marketplace eine **neue, diesem Projekt zugeordnete** Neon-Datenbank anlegen:
+Bereits erstellt und verbunden: Neon-Resource `store_XaZiaJMJ79R9DZFa`, externer Projektname `little-recipe-15893257`, Anzeigename `winzerapp`, **Free (`free_v3`)**, Frankfurt. Verbindung zu Production und Development. Nicht erneut provisionieren.
+
+Referenz für ein späteres, neues isoliertes Setup:
 
 - Plan **Free**, API-Kennung `free_v3`; niemals Launch/Scale auswählen.
 - Region Frankfurt `fra1`.

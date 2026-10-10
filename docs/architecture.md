@@ -1,6 +1,6 @@
 # Architektur
 
-Modularer Monolith nach Produktspezifikation. Aktuell vorhanden: SvelteKit-Oberfläche und frameworkfreie Planungsrechnung. UI liest synthetische Fixtures und ruft ausschließlich `planBlend` auf. Keine Bestandsänderung im Browser.
+Modularer Monolith nach Produktspezifikation. Aktuell vorhanden: SvelteKit-Oberfläche, frameworkfreie Planungsrechnung und serverseitiger Neon-Verbindungstest (`SELECT 1`) unter `/api/health`. UI liest synthetische Fixtures und ruft ausschließlich `planBlend` auf. Keine Bestandsänderung im Browser. Der Datenbanktreiber wird erst im Request initialisiert; Builds brauchen keine DB-Verbindung.
 
 Geplante Servergrenze: OIDC-Session → Membership-/Rollenprüfung → Application Service → PostgreSQL-Transaktion. Authentifizierter Tenant wird serverseitig aufgelöst, niemals aus einer frei wählbaren Browser-ID. Jeder serverseitige Datenzugriff setzt den Tenant-Kontext innerhalb derselben Transaktion.
 
