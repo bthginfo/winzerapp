@@ -1,7 +1,8 @@
 import {readFile,writeFile,mkdir,cp,access} from 'node:fs/promises';import {createHash} from 'node:crypto';import {createRequire} from 'node:module';import {dirname,resolve} from 'node:path';
 const root=new URL('../',import.meta.url);const require=createRequire(new URL('../apps/web/package.json',import.meta.url));const destination=new URL('apps/web/static/ocr/',root);await mkdir(destination,{recursive:true});
-await cp(resolve(dirname(require.resolve('tesseract.js/package.json')),'dist/worker.min.js'),new URL('worker.min.js',destination));
-const core=dirname(require.resolve('tesseract.js-core/package.json'));await mkdir(new URL('core/',destination),{recursive:true});
+const tesseractPackage=require.resolve('tesseract.js/package.json');await cp(resolve(dirname(tesseractPackage),'dist/worker.min.js'),new URL('worker.min.js',destination));
+// Resolve a transitive dependency from its owner, including pnpm's isolated node_modules layout.
+const core=dirname(createRequire(tesseractPackage).resolve('tesseract.js-core/package.json'));await mkdir(new URL('core/',destination),{recursive:true});
 for(const base of ['tesseract-core-lstm','tesseract-core-simd-lstm','tesseract-core-relaxedsimd-lstm'])for(const suffix of ['.wasm.js','.wasm'])await cp(resolve(core,base+suffix),new URL('core/'+base+suffix,destination));
 const manifestPath=new URL('scripts/ocr-manifest.json',root),manifest=JSON.parse(await readFile(manifestPath,'utf8'));await mkdir(new URL('lang/',destination),{recursive:true});
 for(const lang of ['deu','eng','ita','fra']){const file=new URL('lang/'+lang+'.traineddata',destination);let bytes;try{bytes=await readFile(file);}catch{const response=await fetch('https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/'+manifest.commit+'/'+lang+'.traineddata');if(!response.ok)throw new Error('OCR_MODEL_DOWNLOAD_FAILED '+lang);bytes=Buffer.from(await response.arrayBuffer());await writeFile(file,bytes);}

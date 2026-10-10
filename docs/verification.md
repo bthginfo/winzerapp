@@ -7,6 +7,7 @@ Prüfdatum: 10. Oktober 2026. Die Prüfungen verwenden echte Neon-PostgreSQL-Tra
 | `pnpm check` | 0 Fehler, 0 Warnungen |
 | `pnpm build` | Client, Server, lokale OCR/PDF-Assets und Vercel-Adapter erfolgreich gebaut |
 | pnpm 10.28.2 Frozen Lockfile | kompatibel mit der CI-/Vercel-Version |
+| sauberer Checkout ohne vorhandene Abhängigkeiten/Assets | pnpm 10.28.2 Installation, alle 14 Domain-Tests und vollständiger Build erfolgreich; OCR-Core aus seiner besitzenden Abhängigkeit aufgelöst |
 | `pnpm test` | 14 Tests: dezimale Mischung/Rundung, fehlende Analysen, MILP, gemeinsamer Bestand, Vollkosten und Regelprüfung |
 | `pnpm db:verify` | 20 Prüfungen: Journal/Parallelität/Idempotenz, Freeze/Versuch/Freigabe/Produktion, Reservierung, ERP-Hoheit, RLS und externe Laborfreigaben |
 | `pnpm db:verify:full` | 12 Prüfungen: Ausbeute, Material/Zugaben, atomare Abfüllung, Reinigung/Wartung, Kosten/Umlagen, PostGIS, Sensorik, Import, Ressourcenüberschneidung und Datei-Retry |
