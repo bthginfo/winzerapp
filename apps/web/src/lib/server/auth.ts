@@ -6,6 +6,7 @@ import { getRequestEvent } from '$app/server';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { env } from '$env/dynamic/private';
 import * as schema from './auth-schema';
+import {mailConfigured,sendMail} from './mail';
 let instance: ReturnType<typeof create> | undefined;
 function create() {
   if (!env.APP_DATABASE_URL || !env.BETTER_AUTH_SECRET) throw new Error('AUTH_NOT_CONFIGURED');
@@ -13,7 +14,8 @@ function create() {
     secret: env.BETTER_AUTH_SECRET,
     baseURL: env.BETTER_AUTH_URL || undefined,
     database: drizzleAdapter(drizzle(env.APP_DATABASE_URL), { provider:'pg',schema }),
-    emailAndPassword: { enabled:true,minPasswordLength:12,maxPasswordLength:128 },
+    emailAndPassword: { enabled:true,minPasswordLength:12,maxPasswordLength:128,revokeSessionsOnPasswordReset:true,...(mailConfigured()?{sendResetPassword:async({user,url}:{user:{email:string};url:string})=>{await sendMail(user.email,'Vinea · Password / Passwort',url);}}:{}) },
+    ...(mailConfigured()?{emailVerification:{sendOnSignUp:true,sendVerificationEmail:async({user,url}:{user:{email:string};url:string})=>{await sendMail(user.email,'Vinea · Email verification',url);}}}:{}),
     session: { expiresIn:60*60*24*7,updateAge:60*60*24,cookieCache:{enabled:false} },
     rateLimit: { enabled:true,storage:'database',window:60,max:60 },
     plugins:[twoFactor({issuer:'Vinea Winzerapp'}),sveltekitCookies(getRequestEvent)]

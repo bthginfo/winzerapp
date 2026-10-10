@@ -1,19 +1,22 @@
 {
   "name": "winzerapp",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "packageManager": "pnpm@10.28.2",
   "scripts": {
     "dev": "pnpm --filter @vinea/web dev",
     "build": "pnpm --filter @vinea/web build",
     "check": "pnpm --filter @vinea/web check",
     "test": "pnpm --filter @vinea/domain test",
-    "dev:db": "node --env-file=.env.local --env-file=.env.runtime.local --env-file=.env.auth.local scripts/dev.mjs",
+    "dev:db": "node --env-file=.env.local --env-file=.env.runtime.local --env-file=.env.auth.local --env-file-if-exists=.env.integration.local scripts/dev.mjs",
     "db:migrate": "node --env-file=.env.local --env-file-if-exists=.env.runtime.local packages/db/scripts/migrate.mjs",
     "db:verify": "node --env-file=.env.local --env-file=.env.runtime.local packages/db/scripts/verify.mjs",
-    "test:e2e": "node scripts/e2e.mjs"
+    "test:e2e": "node scripts/e2e.mjs",
+    "db:verify:full": "node --env-file=.env.local --env-file=.env.runtime.local packages/db/scripts/verify-operations.mjs",
+    "test:e2e:full": "node scripts/full-e2e.mjs",
+    "preview:db": "node --env-file=.env.local --env-file=.env.runtime.local --env-file=.env.auth.local --env-file-if-exists=.env.integration.local scripts/preview-db.mjs"
   },
   "engines": {
-    "node": ">=22.9.0"
+    "node": ">=22.13.0"
   }
 }

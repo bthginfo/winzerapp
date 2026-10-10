@@ -1,0 +1,1 @@
+import {getAuth} from '$lib/server/auth';export const load:import('./$types').PageServerLoad=async({request,locals})=>({lang:locals.lang,signedIn:Boolean(await getAuth().api.getSession({headers:request.headers}))});

@@ -16,3 +16,21 @@
 Gefäß-QR im Keller öffnen/herunterladen. Smartphone-Kamera öffnet den geschützten Gefäßlink. In unterstützten Browsern ist direktes Scannen möglich; manuelle Kennungssuche bleibt verfügbar. Fotos/PDF sind privat, maximal 2 MB je Datei.
 
 Vor Offline-Arbeit die App online öffnen. Aufgaben, Notizen und Messwerte können als Entwürfe gespeichert werden. Nach Rückkehr **Entwürfe synchronisieren** wählen. Bestand, Reservierung, Freigabe und Abfüllung werden offline nicht gebucht. Bei Versionskonflikt bleibt der Entwurf erhalten; aktuelle Daten laden, fachlich prüfen und bewusst neu erfassen. „Entwurf verwerfen“ löscht nur den lokalen Konflikt. Vor Logout/Betriebswechsel weist die App auf ungesendete Entwürfe hin.
+
+## Zusätzliche Fachmodule
+
+Weinberg: Saison wählen, Arbeitsgang und Aufwand erfassen; bei Schutzmaßnahmen Quelle/Zulassung dokumentieren und fachlich freigeben. Reife und Lese: Proben aufnehmen, Teams/Ressourcen planen, tatsächlichen Wiegeeingang erfassen und eine kg→L-Transformation mit echter Ausbeute durchführen. Karte nur nach bewusster Aktivierung laden; GeoJSON für die ausgewählte Parzelle prüfen.
+
+Labor: Gärlauf starten, Messwerte mit Methode/Einheit/Zeit aufnehmen, eigene Referenzregeln einstellen, Messverlauf und Hinweise prüfen. Sensortoken als Önologie/Betriebsleitung mit MFA erstellen und nur dem berechtigten Gateway geben.
+
+Cuvées: Briefing, Referenzwein und Limits speichern. Optimierer erzeugt mehrere geprüfte Vorschläge; „Rezepte speichern“ legt Entwürfe an. Freigabe, Reservierung und Produktion bleiben eigenständige bestätigte Schritte. Scale-up prüft aktuelle Mengen, Zielgefäß und Pumpe; Ressourcenplanung dokumentiert Zeitraum/Pumpenweg und verhindert Doppelbelegung.
+
+Abfüllung: Materialartikel und Zugänge erfassen; Plan mit benötigtem Verpackungsmaterial erstellen. Ausführung bucht Wein und alle Materialien gemeinsam oder gar nicht. Hygiene/Wartung: belegtes Objekt wählen, Reinigung/Checkliste bestätigen, Defekte dokumentieren. Kosten: zusätzliche Plan-/Istkosten erfassen und indirekte Kosten nachvollziehbar umlegen; Grundweinkostenansatz nicht doppelt erfassen.
+
+Nachweise: Bericht erstellen und PDF/CSV/JSON derselben eingefrorenen Version herunterladen. Neue Daten verändern bereits ausgestellte Berichte nicht. Regionale Regelpakete müssen Quellen, Gültigkeit, fachlichen Prüfer und pass/fail/unknown-Testfälle enthalten; Beispielpaket ist synthetisch und keine Rechtsvorgabe.
+
+Heute: ausgewählte Objektkarte ausdrücklich auf dem Gerät speichern. Offline-Seite zeigt den letzten Datenstand, Aufgaben und Erfassungsentwürfe. Fotos/Dokumente bleiben bis erfolgreicher Übertragung lokal. Ein Mengenentwurf verlangt erneut eine bewusste Online-Prüfung; Konflikte bleiben sichtbar. Vor Abmeldung/Betriebswechsel offene Entwürfe synchronisieren oder ausdrücklich verwerfen.
+
+Assistent: Text tippen, optional Sprache nach Zustimmung oder lokale OCR für Bild/PDF nutzen. Alle erkannten Angaben bearbeiten und bewusst als Notiz/Aufgabe/Messwert bestätigen. OpenAI und semantische Suche erst nach eigener Verbindung und Kostenfreigabe; keine KI-Buchungen.
+
+Team: Einladungslink aus Betrieb & Sicherheit privat teilen oder über verbundenen Maildienst versenden. Empfänger meldet sich mit genau der eingeladenen E-Mail-Adresse an. Externe Labore nur auf ausdrücklich ausgewählte Partien freigeben.

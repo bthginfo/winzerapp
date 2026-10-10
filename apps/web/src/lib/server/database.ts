@@ -3,6 +3,6 @@ import { neon } from '@neondatabase/serverless';
 
 /** Server-only, initialized on demand; no database access during builds. */
 export function database() {
-  if (!env.DATABASE_URL) throw new Error('DATABASE_NOT_CONFIGURED');
-  return neon(env.DATABASE_URL);
+  if (!env.APP_DATABASE_URL) throw new Error('DATABASE_NOT_CONFIGURED');
+  return neon(env.APP_DATABASE_URL);
 }

@@ -3,5 +3,8 @@ packages:
   - packages/*
 allowBuilds:
   esbuild: true
+  tesseract.js: false
 onlyBuiltDependencies:
   - esbuild
+ignoredBuiltDependencies:
+  - tesseract.js

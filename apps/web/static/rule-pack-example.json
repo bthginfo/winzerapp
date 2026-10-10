@@ -1,0 +1,71 @@
+{
+  "name": "Synthetic example \u2014 NOT a legal rule",
+  "jurisdiction": "Test only",
+  "source": "Synthetic business limits for demonstrating validation; NOT law",
+  "reviewer": "Replace with the real reviewer before use",
+  "rules": {
+    "validFrom": "2026-01-01",
+    "validTo": "2026-12-31",
+    "ranges": [
+      {
+        "parameter": "alcohol",
+        "unit": "% vol",
+        "method": "distillation",
+        "minimum": "11",
+        "maximum": "14",
+        "maxAgeDays": 30
+      }
+    ],
+    "grapes": [],
+    "vintages": [],
+    "requireKnownOrigin": false
+  },
+  "tests": [
+    {
+      "input": {
+        "asOf": "2026-10-10T00:00:00Z",
+        "values": {
+          "alcohol": {
+            "value": "12",
+            "unit": "% vol",
+            "method": "distillation",
+            "measuredAt": "2026-10-09T00:00:00Z"
+          }
+        },
+        "grape": null,
+        "vintage": null,
+        "originKnown": false
+      },
+      "expected": "passed"
+    },
+    {
+      "input": {
+        "asOf": "2026-10-10T00:00:00Z",
+        "values": {
+          "alcohol": {
+            "value": "16",
+            "unit": "% vol",
+            "method": "distillation",
+            "measuredAt": "2026-10-09T00:00:00Z"
+          }
+        },
+        "grape": null,
+        "vintage": null,
+        "originKnown": false
+      },
+      "expected": "failed"
+    },
+    {
+      "input": {
+        "asOf": "2026-10-10T00:00:00Z",
+        "values": {
+          "alcohol": null
+        },
+        "grape": null,
+        "vintage": null,
+        "originKnown": false
+      },
+      "expected": "unknown"
+    }
+  ]
+}

@@ -11,3 +11,5 @@ coverage/
 .env*
 !.env.example
 backups/
+
+apps/web/static/ocr/

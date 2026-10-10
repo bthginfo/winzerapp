@@ -1,0 +1,2 @@
+import {json,error} from '@sveltejs/kit';import {context} from '$lib/server/runtime';import {search} from '$lib/server/search';import type {RequestHandler} from './$types';
+export const GET:RequestHandler=async event=>{const {tenant,userId}=await context(event);const q=event.url.searchParams.get('q')??'';if(q.length<2||q.length>160)error(400,'INVALID_QUERY');return json(await search(tenant.id,userId,q));};

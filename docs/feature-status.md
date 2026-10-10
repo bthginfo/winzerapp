@@ -1,0 +1,28 @@
+# Funktionsumfang und Aktivierung
+
+Maßgeblich sind die Produktspezifikation, die Nutzerergänzung DE/EN/IT/FR, Better Auth anstelle OIDC und der vollständige Ausbau über den ursprünglichen MVP hinaus. Der folgende Stand beschreibt Softwarefunktionen; der Testnachweis wird in `verification.md` dokumentiert.
+
+| Bereich | Umgesetzter Umfang | Aktivierung / fachliche Grenze |
+|---|---|---|
+| SaaS / Zugang | getrennte Betriebe, Rollen, externe Laborfreigaben, E-Mail/Passwort, TOTP, sichere Einladungslinks mit Widerruf, Modul- und Regionseinstellungen | Einladung ohne Maildienst privat weitergeben; Reset und Verifikation benötigen SMTP |
+| Heute / Team | Aufgaben mit Zuständigkeit, Terminen, Checklisten, Notizen, Dokumenten und Status; Hinweise zu fälligen Aufgaben, Laborwarnungen und Materialmangel | tägliche Mailerinnerung nach SMTP-Anschluss und verifizierter Empfängeradresse |
+| Weinberg | Parzellen, Saison, Arbeitsgänge, Zeit/Material/Wasser, Reifeproben, Schutzmaßnahmen mit Quellen und fachlicher Freigabe; PostGIS-Polygone, Karten, GeoJSON | keine automatische Pflanzenschutzdosierung; betriebliche Zulassungsnachweise erforderlich |
+| Wetter | kostenloser Bright-Sky/DWD-Abruf, zeitlich gekennzeichnete gespeicherte Prognosen, Stationsdateiimport und eigene Arbeitsfenster | Verfügbarkeit und räumliche Datenabdeckung des Wetterdiensts beachten |
+| Lese | Teams, Maschinen, Ressourcen, Termine, Lieferanten, Wiegeeingang, Qualitätsbefund, nachvollziehbare kg→L-Transformation | tatsächliche Ausbeuten und Messwerte eingeben |
+| Keller | Gefäße/QR/Suche, Partien, Anfangsbestände, Transfer/Teilung/Mischung, Verluste, Reservierungen, Sperren, Korrekturen, Zugaben mit Material- und Volumenbuchung | alle endgültigen Buchungen online und atomar; Begleitmodus erlaubt keine Mengenführung |
+| Gärung / Labor | Messreihen, Methoden/Einheiten/Qualität, unveränderliche Korrekturen, Gärverläufe, Referenzgrenzen, Warnungen, Diagramme, Laborimport, scoped HTTPS-Sensortokens | Sensor/Station liefert echte Messwerte; keine Anlagensteuerung |
+| Cuvées | Briefing, Budget/Zielbereiche/Anteilgrenzen, Referenzwein, Rezeptversionen/Snapshots, reale Versuche, Blindverkostung, individuelle Bewertungen, Varianten- und Jahrgangsvergleich, Scale-up-/Pumpenprüfung, Freigabe, Reservierung, Istproduktion und Nachkontrolle | analytische Ergebnisse als Schätzungen; kein Misch-pH oder versprochener Geschmack |
+| Optimierung | LP/MILP für eine bis fünf Cuvées, gemeinsamer Bestand, Budgets, feste/min./max. Anteile, kompatible Zielwerte; Varianten nach Kosten, Zielabweichung, Restmengen; unabhängige Prüfung | keine automatische Reservierung oder Freigabe; ungeeignete/gesperrte Quellen ausgeschlossen |
+| Abfüllung | Produktionspläne, Verpackungsbedarf, atomarer Wein-/Materialverbrauch, Verluste, SKU/Los, lokaler oder ERP-geführter Flaschenbestand, Rückstellproben, Versand/Rücknahme im App-Modus | ERP-Modus vermeidet doppelte Bestandsführung |
+| Hygiene / Wartung | Gefäß-/Gerätestatus, Reinigung mit vollständig bestätigter Checkliste, Wartung, Sperren, Ressourcen-/Pumpenbelegung und Produktionsfolge | physische Reinigung und Pumpenwege bleiben durch Mitarbeitende zu bestätigen |
+| Kosten | Plan-/Istkosten, Arbeit/Material/Dienstleister/Energie/Verluste, referenzierte Korrekturen, begrenzte Umlagen, Grundwein- und Zusatzkosten, Kosten pro Liter/Flasche | keine Finanzbuchhaltung; doppelte Erfassung im Grundweinkostenansatz vermeiden |
+| Nachweise | tatsächliche Herkunft, unbekannte Anteile, eingefrorene PDF/CSV/JSON-Nachweise mit Historie, überprüfbare versionierte Regelpakete und Befunde | keine erfundenen Rechtsgrenzen; kundenspezifische regionale Regeln/Formate erst nach fachlicher Prüfung importieren |
+| Datenhub | CSV/JSON/XLSX-Eingang, Vorschau/Mapping, versionierte Zuordnungsprofile, Originaldatei/Hash, Einzelzeilenberichte, idempotenter Commit; Tabellen-/Gesamtexporte, GeoJSON, paginierte Read API | Profile für Anfangsbestände, Gefäße, Parzellen, Labor, Materialien, SKU, Ernte, Feldarbeiten, Wetter |
+| ERP | individuelle tenantbezogene Auswahl, verschlüsselte Credentials, Feldhoheit und externe IDs, dokumentierter Winestro-Artikelabruf, bestätigte generische/vintrace-GET-Verträge, gespeicherte API-Snapshots, generische Produktionsübergabe mit Idempotenz und Abgleich | echte Anbieterrechte, Tarifverfügbarkeit und Endpunkte vom Kunden; keine erfundene Hersteller-API. Schreibadapter setzt dokumentierten Receipt-Vertrag voraus |
+| Assistent | bearbeitbare Text-/Sprachentwürfe DE/EN/IT/FR, lokale PNG/JPEG/PDF-Texterkennung, berechtigte Stichwortsuche, OpenAI-Zusammenfassungen/Strukturierung mit Quellen, optionale pgvector-Suche | OpenAI standardmäßig aus; API-Key, Modell, Datenschutz- und Kostenfreigabe pro Betrieb; Browser-Sprachdienst nur mit Zustimmung |
+| Offline | ausdrücklich gespeicherte Objektkarten, Aufgaben, Notizen, Messwert-/Arbeitsentwürfe, Fotos/Dokumente mit Retry und Idempotenz, sichtbare Konflikte, Bestandsentwürfe mit erneuter Online-Bestätigung | keine endgültige Offline-Mengenbuchung; lokale Daten bei Logout/Betriebswechsel gelöscht |
+| Betrieb | eingeschränkte DB-Rolle, RLS/composite Tenant-FKs, Audit/Outbox, persistente Übertragungszustände, täglicher Cron, Healthcheck, verschlüsselte Backups und leere isolierte Wiederherstellung | Neon Free; keine bezahlten Ressourcen automatisch angelegt; kundenspezifische Pilotabnahme bleibt fachliche Arbeit |
+
+## Bewusst außerhalb der vorliegenden Spezifikation
+
+Vollständige Finanzbuchhaltung, Kasse, eigener Webshop, automatische Anlagensteuerung, Sekt/Tirage/Dosage, Genossenschafts- und Lohnverarbeitungs-Abrechnung sind im Produktplan ausdrücklich spätere/separate Fachbereiche. Sie werden nicht als vorhandene Funktionen dargestellt.

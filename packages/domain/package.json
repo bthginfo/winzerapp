@@ -2,8 +2,20 @@
   "name": "@vinea/domain",
   "private": true,
   "type": "module",
-  "exports": "./src/blending.ts",
-  "scripts": { "test": "node --import tsx --test test/*.test.ts" },
-  "dependencies": { "decimal.js": "^10.6.0" },
-  "devDependencies": { "tsx": "^4.0.0" }
+  "exports": {
+    ".": "./src/blending.ts",
+    "./optimizer": "./src/optimizer.ts",
+    "./rules": "./src/rules.ts",
+    "./costs": "./src/costs.ts"
+  },
+  "scripts": {
+    "test": "node --import tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "decimal.js": "^10.6.0",
+    "javascript-lp-solver": "^1.0.3"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0"
+  }
 }

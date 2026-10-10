@@ -1,0 +1,11 @@
+import {readFile,writeFile,mkdir,cp,access} from 'node:fs/promises';import {createHash} from 'node:crypto';import {createRequire} from 'node:module';import {dirname,resolve} from 'node:path';
+const root=new URL('../',import.meta.url);const require=createRequire(new URL('../apps/web/package.json',import.meta.url));const destination=new URL('apps/web/static/ocr/',root);await mkdir(destination,{recursive:true});
+await cp(resolve(dirname(require.resolve('tesseract.js/package.json')),'dist/worker.min.js'),new URL('worker.min.js',destination));
+const core=dirname(require.resolve('tesseract.js-core/package.json'));await mkdir(new URL('core/',destination),{recursive:true});
+for(const base of ['tesseract-core-lstm','tesseract-core-simd-lstm','tesseract-core-relaxedsimd-lstm'])for(const suffix of ['.wasm.js','.wasm'])await cp(resolve(core,base+suffix),new URL('core/'+base+suffix,destination));
+const manifestPath=new URL('scripts/ocr-manifest.json',root),manifest=JSON.parse(await readFile(manifestPath,'utf8'));await mkdir(new URL('lang/',destination),{recursive:true});
+for(const lang of ['deu','eng','ita','fra']){const file=new URL('lang/'+lang+'.traineddata',destination);let bytes;try{bytes=await readFile(file);}catch{const response=await fetch('https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/'+manifest.commit+'/'+lang+'.traineddata');if(!response.ok)throw new Error('OCR_MODEL_DOWNLOAD_FAILED '+lang);bytes=Buffer.from(await response.arrayBuffer());await writeFile(file,bytes);}
+ const digest=createHash('sha256').update(bytes).digest('hex');if(manifest.languages[lang]&&manifest.languages[lang]!==digest)throw new Error('OCR_MODEL_CHECKSUM_FAILED '+lang);if(!manifest.languages[lang]){if(!process.env.OCR_INITIALIZE_MANIFEST)throw new Error('OCR_MANIFEST_MISSING '+lang);manifest.languages[lang]=digest;}console.log('Prepared local OCR model: '+lang);}
+if(process.env.OCR_INITIALIZE_MANIFEST)await writeFile(manifestPath,JSON.stringify(manifest,null,2)+'\n');
+
+const pdf=dirname(require.resolve('pdfjs-dist/package.json'));await cp(resolve(pdf,'build/pdf.worker.min.mjs'),new URL('pdf.worker.min.mjs',destination));for(const directory of ['wasm','standard_fonts'])await cp(resolve(pdf,directory),new URL(directory+'/',destination),{recursive:true});

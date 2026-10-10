@@ -1,14 +1,11 @@
-# Abgegrenzte Folgeausbauten
+# Kunden- und Betriebsabhängige Aktivierung
 
-Das MVP deckt den in Abschnitt 12/13 der Spezifikation beschriebenen Kernablauf ab. Weitere Ausbauten werden nicht als bestehende Integration dargestellt:
+Der ehemalige MVP-Folgeausbau ist implementiert; der aktuelle Funktionsumfang steht in [feature-status.md](feature-status.md). Die folgenden Punkte verlangen echte Kundendaten bzw. fachliche Abnahme, keine kostenpflichtige Provisionierung durch die App:
 
-- Live-ERP erst mit dokumentierter Ziel-API, API-Zugang, Capability-Mapping und bestätigter Bestandsführerschaft; derzeit ausschließlich persistenter Demo-Adapter.
-- E-Mail-Verifikation, Einladung und Passwortreset erst mit echtem Versanddienst. Aktuell Registrierung und ausdrückliche Zuordnung vorhandener Benutzer-IDs.
-- Großbetriebsoptimierung: Cursor-Pagination, Streaming großer Exporte/Backups und gezieltere Sperren statt Serialisierung je Betrieb.
-- Vollständige Schlagkartei, Pflanzenschutz, Wetterdaten, Wartung und umfassende Kostenrechnung.
-- Geometrie-Bearbeitung/Karten und PostGIS; Basismodelle speichern derzeit optionales GeoJSON.
-- Geprüfte regionale Regelpakete und Rechtsklassifikation, sensorische Modelle, LP/MILP-Optimierer.
-- Sprach-/KI-Notizen, OCR, semantische Suche und Sensor/IoT-Anbindung erst in Phase 3 mit bestätigtem Provider und Kostenrahmen.
-- Zusätzliche Importprofile (Labor, Parzellen, Artikel/XLSX-Eingang) neben dem getesteten CSV-Anfangsbestandsprofil.
-- Automatisierte Hintergrundverarbeitung und Versand nach geklärtem kostenlosen Betriebsweg; derzeit ausdrücklich manueller Outbox-Lauf.
-- Fachliche Pilotabnahme, messbare Backup-/Restore-Ziele und mobile Tests auf den konkret eingesetzten Geräten.
+- OpenAI-Key und gewünschte Modelle pro Weingut hinterlegen, Datenschutz und Kosten explizit bestätigen. Ohne Verbindung bleiben Text, lokale OCR und Stichwortsuche nutzbar.
+- SMTP-Dienst verbinden; dann E-Mail-Verifikation, Passwortreset, Einladungsversand und freiwillige tägliche Aufgaben-Erinnerung aktivieren.
+- Kunden-ERP auswählen, dokumentierte Endpunkte und Rechte prüfen, vom Betreiber freigegebenen HTTPS-Host konfigurieren und externe Artikel-/Material-IDs zuordnen. Bis dahin CSV/JSON/XLSX verwenden. Winestro-Artikelabruf stellt keine universelle Keller-API dar.
+- Weinregion und fachlich geprüfte regionale Regelpakete/amtliche Meldeformate je Weingut festlegen. Synthetisches Beispielpaket ausdrücklich kein Gesetz.
+- Pilotabnahme auf den tatsächlich genutzten Smartphones, mit realen Pumpenwegen, Messmethoden, Arbeitsbelegen und Backup-Zielen durchführen.
+
+Kein bezahlter Datenbanktarif und kein zusätzlicher kostenpflichtiger Provider werden automatisch ausgewählt.

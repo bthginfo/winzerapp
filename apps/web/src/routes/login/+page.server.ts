@@ -1,1 +1,1 @@
-export const load:import('./$types').PageServerLoad=({locals})=>({lang:locals.lang});
+import {mailConfigured} from '$lib/server/mail';export const load:import('./$types').PageServerLoad=({locals,url})=>({lang:locals.lang,mailEnabled:mailConfigured(),returnTo:url.searchParams.get('returnTo')==='join'?'/join':'/app'});

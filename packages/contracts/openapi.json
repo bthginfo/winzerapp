@@ -1,8 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Vinea MVP API",
-    "version": "1.0.0"
+    "title": "Vinea Winzerapp API",
+    "version": "0.2.0",
+    "description": "Better Auth session APIs are provided by the pinned Better Auth library. POST/PUT/DELETE browser calls require a matching Origin header. Tenant is resolved from membership, never trusted from a submitted payload."
   },
   "servers": [
     {
@@ -17,7 +18,24 @@
   "paths": {
     "/api/commands": {
       "post": {
-        "summary": "Execute a tenant-scoped, idempotent command",
+        "summary": "Execute an atomic tenant-scoped command",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        },
         "parameters": [
           {
             "in": "header",
@@ -39,57 +57,185 @@
               }
             }
           }
-        },
-        "responses": {
-          "200": {
-            "description": "Committed result, also returned on identical retries"
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "401": {
-            "description": "Missing session"
-          },
-          "403": {
-            "description": "Role, origin or MFA missing"
-          },
-          "409": {
-            "description": "Business rule or optimistic version conflict"
-          }
         }
       }
     },
     "/api/model": {
       "get": {
-        "summary": "Tenant-scoped read model (up to 500 rows per resource)",
+        "summary": "Tenant read model; up to 500 rows per resource",
         "responses": {
           "200": {
-            "description": "Decimal quantities represented as strings"
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/read": {
+      "get": {
+        "summary": "Paginated tenant-scoped resource; cursor is returned as next_cursor",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "collection",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/import/parse": {
+      "post": {
+        "summary": "Parse CSV, JSON-array or XLSX; preserve original file",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
           }
         }
       }
     },
     "/api/import": {
       "post": {
-        "summary": "Persist validated opening-stock CSV preview and mapping",
+        "summary": "Persist reviewed mapping, file hash and validation preview",
         "responses": {
           "200": {
-            "description": "Batch ID and row validation"
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
           }
         }
       },
       "put": {
-        "summary": "Commit a reviewed CSV batch once",
+        "summary": "Commit reviewed batch idempotently; return row results",
         "responses": {
           "200": {
-            "description": "Per-row outcomes"
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/import/profiles": {
+      "post": {
+        "summary": "Save immutable version of a mapping profile",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
           }
         }
       }
     },
     "/api/export": {
       "get": {
-        "summary": "Persist and download JSON, CSV or XLSX snapshot",
+        "summary": "Archive/download full JSON, table CSV or XLSX snapshot",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        },
         "parameters": [
           {
             "in": "query",
@@ -101,21 +247,619 @@
                 "xlsx"
               ]
             }
+          },
+          {
+            "in": "query",
+            "name": "collection",
+            "schema": {
+              "type": "string"
+            }
           }
-        ],
+        ]
+      }
+    },
+    "/api/reports": {
+      "post": {
+        "summary": "Create frozen provenance, field, cost or laboratory evidence",
         "responses": {
           "200": {
-            "description": "Download"
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      },
+      "get": {
+        "summary": "Download existing report as PDF, CSV or JSON",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/gis": {
+      "get": {
+        "summary": "Download authorized vineyard GeoJSON",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/rules": {
+      "post": {
+        "summary": "Import reviewed rule pack with tests or record versioned findings",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/planning": {
+      "post": {
+        "summary": "Save blend brief, resource booking/status or check scale-up",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/optimizer": {
+      "post": {
+        "summary": "Solve shared-stock MILP; no booking or reservation",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/connections": {
+      "post": {
+        "summary": "Configure tenant provider and encrypted credentials; owner and MFA",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/connections/sync": {
+      "post": {
+        "summary": "Read confirmed provider contract and retain source snapshot",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/connections/deliver": {
+      "post": {
+        "summary": "Explicitly enqueue bottling production or process/reconcile durable deliveries",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/search": {
+      "get": {
+        "summary": "Search authorized current data by keyword",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/search/semantic": {
+      "post": {
+        "summary": "Explicitly index/search OpenAI embeddings with consent and quota",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/assistant": {
+      "post": {
+        "summary": "OpenAI draft/summary with authorized sources; no final actions",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/sensors": {
+      "post": {
+        "summary": "Create scoped sensor token; display once; MFA",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/sensors/ingest": {
+      "post": {
+        "summary": "Receive idempotent scoped measurements",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        },
+        "security": [
+          {
+            "sensor": []
+          }
+        ]
+      }
+    },
+    "/api/invitations": {
+      "post": {
+        "summary": "Issue seven-day invitation or accept with matching logged-in email",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Owner revokes unused invitation; MFA",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/settings": {
+      "post": {
+        "summary": "Owner edits versioned winery settings; MFA",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/notifications": {
+      "get": {
+        "summary": "Read own notification preference/provider availability",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      },
+      "post": {
+        "summary": "Set own opt-in daily email digest",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
           }
         }
       }
     },
     "/api/jobs": {
       "post": {
-        "summary": "Process this winery’s persistent demo-ERP outbox",
+        "summary": "Process explicitly marked demo-ERP outbox; no external transfer",
         "responses": {
           "200": {
-            "description": "Counters; no live ERP transmission"
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/cron": {
+      "get": {
+        "summary": "Daily durable worker and optional mail digest",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        },
+        "security": [
+          {
+            "cron": []
+          }
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "summary": "Infrastructure health; no tenant data",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/assets": {
+      "post": {
+        "summary": "Store private file, optional client_id deduplication",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      }
+    },
+    "/api/assets/{id}": {
+      "get": {
+        "summary": "Read authorized private file",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ]
+      }
+    },
+    "/api/tenants": {
+      "get": {
+        "summary": "List own memberships",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create own winery",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
+          }
+        }
+      },
+      "put": {
+        "summary": "Select authorized active winery",
+        "responses": {
+          "200": {
+            "description": "Authorized result; decimals represented as strings"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing session or service token"
+          },
+          "403": {
+            "description": "Origin, role, scope or MFA required"
+          },
+          "409": {
+            "description": "Domain, version, idempotency or provider configuration conflict"
           }
         }
       }
@@ -127,12 +871,1785 @@
         "type": "apiKey",
         "in": "cookie",
         "name": "better-auth.session_token"
+      },
+      "sensor": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "cron": {
+        "type": "http",
+        "scheme": "bearer"
       }
     },
     "schemas": {
       "Command": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "season_create"
+              },
+              "vineyard_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "vintage": {
+                "type": "integer",
+                "minimum": 1900,
+                "maximum": 2200
+              },
+              "management": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "planned_kg": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "vineyard_id",
+              "vintage",
+              "management",
+              "planned_kg"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "field_record"
+              },
+              "vineyard_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "season_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "pruning",
+                  "soil",
+                  "canopy",
+                  "observation",
+                  "protection",
+                  "irrigation",
+                  "harvest",
+                  "other"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 5000
+              },
+              "performed_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "hours": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "area_ha": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "product": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "product_batch": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "quantity": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "unit": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "operator": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "authorization": {
+                "type": "string",
+                "maxLength": 5000
+              },
+              "source": {
+                "type": "string",
+                "maxLength": 5000
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "vineyard_id",
+              "kind",
+              "description",
+              "performed_at",
+              "hours",
+              "area_ha",
+              "quantity",
+              "unit",
+              "operator"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "field_approve"
+              },
+              "field_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "expected_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "review_acknowledged": {
+                "type": "boolean",
+                "const": true
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "field_id",
+              "expected_version",
+              "review_acknowledged"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "maturity_record"
+              },
+              "vineyard_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "season_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "sampled_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "location": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "sugar": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "sugar_unit": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "acidity": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "ph": {
+                "type": "string"
+              },
+              "method": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "quality": {
+                "default": "measured",
+                "type": "string",
+                "enum": [
+                  "measured",
+                  "estimated"
+                ]
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "vineyard_id",
+              "code",
+              "sampled_at",
+              "location",
+              "sugar_unit",
+              "method",
+              "quality"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "resource_create"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "team",
+                  "machine",
+                  "pump",
+                  "equipment"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 5000
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "name",
+              "kind"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "harvest_plan"
+              },
+              "vineyard_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "vintage": {
+                "type": "integer",
+                "minimum": 1900,
+                "maximum": 2200
+              },
+              "planned_kg": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "starts_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "ends_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "resource_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "target_vessel_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "supplier": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "instructions": {
+                "type": "string",
+                "maxLength": 5000
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "vineyard_id",
+              "vintage",
+              "planned_kg",
+              "starts_at",
+              "ends_at",
+              "supplier",
+              "instructions"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "harvest_plan_update"
+              },
+              "plan_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "expected_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "planned",
+                  "in_progress",
+                  "completed",
+                  "cancelled"
+                ]
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "plan_id",
+              "expected_version",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "harvest_transform"
+              },
+              "harvest_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "input_kg": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "output_l": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "byproduct_kg": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "target_vessel_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "cost_per_l": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "harvest_id",
+              "input_kg",
+              "output_l",
+              "byproduct_kg",
+              "code",
+              "name",
+              "target_vessel_id",
+              "cost_per_l"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "fermentation_start"
+              },
+              "lot_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "starts_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "yeast": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "target_temperature": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^-?(0|[1-9]\\d*)(\\.\\d{1,6})?$"
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 5000
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "lot_id",
+              "name",
+              "starts_at",
+              "yeast"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "fermentation_update"
+              },
+              "run_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "expected_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "active",
+                  "paused",
+                  "completed"
+                ]
+              },
+              "ends_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "run_id",
+              "expected_version",
+              "status",
+              "ends_at"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "lab_rule_create"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "lot_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "parameter": {
+                "type": "string",
+                "enum": [
+                  "temperature",
+                  "sugar",
+                  "alcohol",
+                  "acidity",
+                  "ph",
+                  "free_so2"
+                ]
+              },
+              "unit": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "method": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "minimum": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^-?(0|[1-9]\\d*)(\\.\\d{1,6})?$"
+              },
+              "maximum": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^-?(0|[1-9]\\d*)(\\.\\d{1,6})?$"
+              },
+              "max_age_hours": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 87600
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "name",
+              "parameter",
+              "unit",
+              "method",
+              "max_age_hours"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "material_create"
+              },
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "bottle",
+                  "closure",
+                  "label",
+                  "box",
+                  "treatment",
+                  "cleaner",
+                  "other"
+                ]
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "piece",
+                  "kg",
+                  "g",
+                  "l",
+                  "ml"
+                ]
+              },
+              "cost_per_unit": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "reorder_at": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "code",
+              "name",
+              "kind",
+              "unit",
+              "cost_per_unit",
+              "reorder_at"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "material_receive"
+              },
+              "material_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "expected_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "quantity": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "batch": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 5000
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "material_id",
+              "expected_version",
+              "quantity",
+              "batch",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "treatment_record"
+              },
+              "position_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "expected_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "material_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "quantity": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "added_volume_l": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "batch": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 5000
+              },
+              "authorization": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 5000
+              },
+              "operator": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "position_id",
+              "expected_version",
+              "material_id",
+              "quantity",
+              "added_volume_l",
+              "batch",
+              "reason",
+              "authorization",
+              "operator"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "cleaning_record"
+              },
+              "vessel_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "resource_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "expected_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "performed_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "method": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "product": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "product_batch": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "quantity": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "unit": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "checklist": {
+                "minItems": 1,
+                "maxItems": 50,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 160
+                    },
+                    "done": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "done"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "result": {
+                "type": "string",
+                "enum": [
+                  "ready",
+                  "blocked"
+                ]
+              },
+              "verified_by": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "expected_version",
+              "performed_at",
+              "method",
+              "product",
+              "quantity",
+              "unit",
+              "checklist",
+              "result",
+              "verified_by"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "maintenance_create"
+              },
+              "vessel_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "resource_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "performed_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "due_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "findings": {
+                "type": "string",
+                "maxLength": 5000
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "performed_at",
+              "findings"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "maintenance_update"
+              },
+              "maintenance_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "expected_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "open",
+                  "doing",
+                  "done"
+                ]
+              },
+              "findings": {
+                "type": "string",
+                "maxLength": 5000
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "maintenance_id",
+              "expected_version",
+              "status",
+              "findings"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "cost_record"
+              },
+              "lot_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "vineyard_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "bottling_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "category": {
+                "type": "string",
+                "enum": [
+                  "work",
+                  "material",
+                  "service",
+                  "energy",
+                  "loss",
+                  "other"
+                ]
+              },
+              "amount": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^-?(0|[1-9]\\d*)(\\.\\d{1,6})?$"
+              },
+              "currency": {
+                "default": "EUR",
+                "type": "string",
+                "const": "EUR"
+              },
+              "basis": {
+                "type": "string",
+                "enum": [
+                  "planned",
+                  "actual"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 5000
+              },
+              "invoice": {
+                "type": "string",
+                "maxLength": 5000
+              },
+              "correction_of": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "category",
+              "amount",
+              "currency",
+              "basis",
+              "description"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "cost_allocate"
+              },
+              "cost_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "lot_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "amount": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "basis": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "cost_id",
+              "lot_id",
+              "amount",
+              "basis"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "bottling_plan"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "position_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "sku_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "bottle_count": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10000000
+              },
+              "loss_l": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "starts_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "supplier": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "requirements": {
+                "minItems": 1,
+                "maxItems": 50,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "material_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    "per_bottle": {
+                      "type": "string",
+                      "maxLength": 24,
+                      "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+                    },
+                    "batch": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 160
+                    }
+                  },
+                  "required": [
+                    "material_id",
+                    "per_bottle"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "name",
+              "position_id",
+              "sku_id",
+              "bottle_count",
+              "loss_l",
+              "starts_at",
+              "supplier",
+              "requirements"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "bottling_plan_cancel"
+              },
+              "plan_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "expected_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "plan_id",
+              "expected_version"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "bottling_execute"
+              },
+              "plan_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "expected_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "position_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "bottle_count": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10000000
+              },
+              "loss_l": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,3})?$"
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "plan_id",
+              "expected_version",
+              "position_version",
+              "code",
+              "bottle_count",
+              "loss_l"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "reference_record"
+              },
+              "lot_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "bottling_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "trial_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "location": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "sampled_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "review_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 5000
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "code",
+              "location",
+              "sampled_at",
+              "description"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "packaged_dispatch"
+              },
+              "bottling_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "quantity": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 10000000
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "dispatch",
+                  "return"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 5000
+              },
+              "external_reference": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "bottling_id",
+              "quantity",
+              "kind",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "weather_rule_create"
+              },
+              "vineyard_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "parameter": {
+                "type": "string",
+                "enum": [
+                  "temperature",
+                  "precipitation",
+                  "wind_speed"
+                ]
+              },
+              "minimum": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^-?(0|[1-9]\\d*)(\\.\\d{1,6})?$"
+              },
+              "maximum": {
+                "type": "string",
+                "maxLength": 24,
+                "pattern": "^-?(0|[1-9]\\d*)(\\.\\d{1,6})?$"
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "vineyard_id",
+              "name",
+              "parameter"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "sensor_disable"
+              },
+              "sensor_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "expected_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "sensor_id",
+              "expected_version"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "vineyard_geometry"
+              },
+              "vineyard_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "expected_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "geometry": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "Polygon"
+                  },
+                  "coordinates": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "minItems": 4,
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "prefixItems": [
+                          {
+                            "type": "number",
+                            "minimum": -180,
+                            "maximum": 180
+                          },
+                          {
+                            "type": "number",
+                            "minimum": -90,
+                            "maximum": 90
+                          }
+                        ],
+                        "items": false,
+                        "minItems": 2,
+                        "maxItems": 2
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "type",
+                  "coordinates"
+                ],
+                "additionalProperties": false
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "vineyard_id",
+              "expected_version",
+              "geometry"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "connection_create"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "adapter": {
+                "type": "string",
+                "enum": [
+                  "file",
+                  "sensor",
+                  "brightsky",
+                  "openai-compatible"
+                ]
+              },
+              "capabilities": {
+                "maxItems": 10,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "csv",
+                    "json",
+                    "xlsx",
+                    "geojson",
+                    "read",
+                    "notes",
+                    "ocr",
+                    "search"
+                  ]
+                }
+              },
+              "authority": {
+                "type": "object",
+                "properties": {
+                  "wine": {
+                    "type": "string",
+                    "enum": [
+                      "app",
+                      "erp"
+                    ]
+                  },
+                  "bottles": {
+                    "type": "string",
+                    "enum": [
+                      "app",
+                      "erp"
+                    ]
+                  }
+                },
+                "required": [
+                  "wine",
+                  "bottles"
+                ],
+                "additionalProperties": false
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "name",
+              "adapter",
+              "capabilities",
+              "authority"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "connection_update"
+              },
+              "connection_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "expected_version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "enabled": {
+                "type": "boolean"
+              },
+              "authority": {
+                "type": "object",
+                "properties": {
+                  "wine": {
+                    "type": "string",
+                    "enum": [
+                      "app",
+                      "erp"
+                    ]
+                  },
+                  "bottles": {
+                    "type": "string",
+                    "enum": [
+                      "app",
+                      "erp"
+                    ]
+                  }
+                },
+                "required": [
+                  "wine",
+                  "bottles"
+                ],
+                "additionalProperties": false
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "connection_id",
+              "expected_version",
+              "enabled",
+              "authority"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "external_map"
+              },
+              "connection_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "entity_type": {
+                "type": "string",
+                "enum": [
+                  "sku",
+                  "lot",
+                  "vineyard",
+                  "material"
+                ]
+              },
+              "internal_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "external_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "type",
+              "connection_id",
+              "entity_type",
+              "internal_id",
+              "external_id"
+            ],
+            "additionalProperties": false
+          },
           {
             "type": "object",
             "properties": {

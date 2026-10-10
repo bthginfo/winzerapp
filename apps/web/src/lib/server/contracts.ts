@@ -1,8 +1,10 @@
 import { z } from 'zod';
+import { operationalDefs } from './operational-contracts';
 const id=z.uuid(), amount=z.string().regex(/^(0|[1-9]\d*)(\.\d{1,3})?$/).max(24), name=z.string().trim().min(1).max(160), reason=z.string().min(5).max(2000), version=z.number().int().positive(), date=z.iso.datetime({offset:true}), text=z.string().max(5000);
 const source=z.object({position_id:id,quantity_l:amount,expected_version:version});
 const component=z.object({position_id:id,quantity_l:amount});
-const defs={
+export const defs={
+ ...operationalDefs,
  vessel_update:{vessel_id:id,expected_version:version,status:z.enum(['ready','cleaning','blocked']),capacity_l:amount.optional()},
  vessel_create:{code:name,name,kind:z.enum(['tank','barrel','container']).default('tank'),capacity_l:amount},
  lot_create:{code:name,name,grape:name.optional(),vintage:z.number().int().min(1900).max(2200),cost_per_l:amount.default('0'),material:z.enum(['must','wine']).default('wine'),harvest_id:id.optional()},
