@@ -1,3 +1,3 @@
-# Worker — geplant
+# Persistente Jobverarbeitung
 
-Outbox-/Jobverarbeitung nach Implementierung des PostgreSQL-Buchungskerns. Keine laufende Worker-Implementierung und keine unendliche Schleife in Vercel-Request-Funktionen. Hosting erst bei Bedarf auswählen; keine kostenpflichtige Ressource im Startsetup.
+MVP-Verarbeitung: `app.process_jobs` in `packages/db/migrations/0006_worker_assets.sql`, aufgerufen durch `/api/jobs` im Datenhub. Tenant/Actor werden aus der aktuellen Session aufgelöst. PostgreSQL-Outbox, deterministische Quittungen, `FOR UPDATE SKIP LOCKED`, Retry und Reconciliation schützen vor doppelter Demo-Übertragung. Kein separater kostenpflichtiger Worker und keine unendliche Request-Schleife.

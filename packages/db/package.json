@@ -1,0 +1,8 @@
+{
+  "name": "@vinea/db",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "migrate": "node --env-file=../../.env.local --env-file-if-exists=../../.env.runtime.local scripts/migrate.mjs"
+  }
+}

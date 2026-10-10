@@ -1,9 +1,13 @@
 # Fachkern
 
-Partie, Gefäß, Bestandsposition, Rezeptversion, tatsächliche Mischung und Abfüllcharge bleiben getrennte Entitäten. Der Herkunftsgraph folgt Parzelle → Ernte → Most/Weinpartie → Mischung → Abfüllcharge → ERP-Artikel.
+Weinberg, Lese, Partie, Gefäß, Bestandsposition, Rezeptversion, Versuch, freigegebener Auftrag, tatsächliche Mischung, Produkt/SKU und Abfülllos sind getrennte Entitäten. Ernte-Kilogramm werden nicht still in Wein-Liter umgerechnet.
 
-Implementiert ist ausschließlich `planBlend`: prüft Dezimalstrings, positive Gesamtmenge, verfügbare Menge, gesperrte Quellen und doppelte Quellreferenzen. Berechnet Weinkosten, vergleichbare Alkoholkonzentration und deterministisch gerundete Versuchsmengen. Das Beispiel 600/400 L liefert 12,60 % vol als Schätzung, 2.400 € Weinkosten und 150/100 ml für 250 ml Versuch.
+`planBlend` prüft dezimale Quellen, gesperrte Partien, doppelte Referenzen und verfügbaren Bestand. 600/400 L mit 2/3 €/L und 12/13,5 % vol ergeben 1.000 L, 2.400 € reine Weinkosten, 2,40 €/L und geschätzt 12,60 % vol bei passenden Einheiten/Methoden. Fehlende/incompatible Befunde bleiben `null`. pH ist immer `null`; Sensorik und freies SO₂ werden nicht gemittelt.
 
-Fehlende oder methodisch inkompatible Alkoholwerte liefern `null`. pH ist immer `null`; tatsächlicher Versuch muss analysiert werden. Volumenadditivität ist eine Planungsannahme. Weinkosten enthalten keine Arbeit, Verpackung oder Verluste. Der JSON-Export markiert `estimated: true`, Modellversion, Quellreferenzen und `productionApproved: false`.
+Planung allein bucht nichts. Freeze archiviert unveränderliche Version/Evidenz. Reale Versuche buchen Probenverbrauch in 1-ml-Bestandsschritten; Rest wird deterministisch der letzten Quelle zugeordnet. Der Planungsrechner kann hundertstel ml anzeigen; die tatsächliche Entnahmekarte dokumentiert die buchbare 1-ml-Rundung.
 
-Nicht implementiert: Probenentnahme als Bestandsbuchung, Laborhistorie, Rezeptfreeze, Freigabe, Reservierung, atomare Mischung, Abfüllung und Herkunftsbericht. Keine dieser Funktionen wird durch den Planungsrechner ersetzt.
+`app.command` erzeugt ausgeglichenes Mengenjournal und Bestandsprojektion zusammen. Opening belastet externes Eröffnungskonto; Verlust, Probe und Abfüllung haben getrennte Konten. Transfer/Teilung erhalten die Partie. Mischung erzeugt neue Partie und tatsächliche Herkunftsbeiträge. Verluste verändern die tatsächliche Zielmenge und Kosten je verbleibendem Liter.
+
+Freigabe setzt aktuellen Bestand, freie Kapazität, Rollen/MFA und ausdrückliche fachliche Prüfung voraus; regionale Regelprüfung bleibt separat gekennzeichnet. Reservierungen sperren frei verfügbare Mengen. Produktion konsumiert die eigenen Reservierungen; Teilproduktion erhält den Rest. Geänderte Anteile oder zusätzliche Mengen verlangen eine exakte begründete Abweichungsfreigabe.
+
+Abfüllung 1.000 × 0,75 L + 5 L dokumentierter Verlust konsumiert 755 L. Standalone: App führt Abfülllos; ERP-Modus: externe Flaschenbestandsführerschaft, kein zweites Warenlager. Herkunft folgt ausschließlich tatsächlichen Mengen-Kanten. Ein nicht belegter Weinberg wird nicht durch Rebsorte/Jahrgang erfunden.

@@ -1,27 +1,19 @@
-# Vercel und kostenlose Datenbank
+# Vercel und Neon Free
 
-## Webprojekt
+Vercel-Projekt `winzerapp`, Root Directory `apps/web`, SvelteKit, Node.js 22.x, Workspace-Dateien außerhalb Root Directory erlaubt, Funktionsregion `fra1`. Repository: `bthginfo/winzerapp`; Push auf `main` löst Produktion aus. Keine bezahlte Build-Maschine oder neue Integration buchen.
 
-GitHub-Repository `winzerapp` importieren. Framework **SvelteKit**, Root Directory **apps/web**, Node.js **22.x**. Zugriff auf Workspace-Dateien außerhalb der Root Directory zulassen. Mit pnpm aus dem Repository-Lockfile installieren. Der Vercel-Adapter baut Node-Funktionen für Frankfurt (`fra1`). Keine kostenpflichtigen Build-Maschinen oder Add-ons aktivieren.
+Bestehende Neon-Resource `store_XaZiaJMJ79R9DZFa` / Projekt `little-recipe-15893257`, Plan **Free (`free_v3`)**, Frankfurt. Production und Development sind verbunden; Preview ist bewusst nicht mit Produktionsdaten verbunden. Der Vercel-Teamtarif besteht bereits und wird nicht verändert.
 
-Die Planungsoberfläche benötigt keine Umgebungsvariablen. `/api/health` prüft mit dem serverseitigen `DATABASE_URL` die PostgreSQL-Verbindung und liefert bei Erfolg `{ "status": "ok", "database": "connected" }`; sonst HTTP 503 ohne technische Fehlerdetails.
+## Reihenfolge
 
-## Neon Free
+1. Bestehende Datenbank sichern, Migrationszugang nur lokal laden.
+2. `pnpm db:migrate`: versionierte SQL-Dateien mit Checksumme; Laufzeitrolle ohne RLS-Bypass.
+3. `APP_DATABASE_URL` aus der ignorierten `.env.runtime.local` als verschlüsselte Variable für Production/Development konfigurieren.
+4. `BETTER_AUTH_SECRET` für Production mit stabilen mindestens 32 Zufallsbytes; `BETTER_AUTH_URL=https://winzerapp.vercel.app`. Entwicklungssecret separat verwenden und lokale URL auf `http://localhost:5173` setzen.
+5. `pnpm check`, `pnpm test`, `pnpm build`, echte DB- und Browserprüfungen ausführen.
+6. Commit auf `main` pushen, Vercel-Build prüfen. Bei Deployment Protection mit Vercel-authentifiziertem Zugriff testen; Schutz nicht für automatisierte Prüfungen abschalten.
+7. `/api/health`, `/api/auth/ok`, Registrierung, Betrieb, MFA und Fachablauf prüfen.
 
-Bereits erstellt und verbunden: Neon-Resource `store_XaZiaJMJ79R9DZFa`, externer Projektname `little-recipe-15893257`, Anzeigename `winzerapp`, **Free (`free_v3`)**, Frankfurt. Verbindung zu Production und Development. Nicht erneut provisionieren.
+Kein produktiver Login mit Eigentümerzugang. Kein DB-Migrationsskript im Web-Build. Unkonfigurierte Previews können die öffentliche Beispieloberfläche anzeigen; für private Fachmodule ist eine eigene isolierte Free-Datenbank erforderlich. Keine Produktionssecrets pauschal nach Preview kopieren.
 
-Referenz für ein späteres, neues isoliertes Setup:
-
-- Plan **Free**, API-Kennung `free_v3`; niemals Launch/Scale auswählen.
-- Region Frankfurt `fra1`.
-- Name `winzerapp`.
-- Mit dem Vercel-Projekt `winzerapp` verbinden.
-- Verbindung ausschließlich als serverseitiges `DATABASE_URL`; niemals mit öffentlichem Präfix.
-
-Tarifgrenzen direkt in der aktuellen Anbieteranzeige prüfen. Bei nicht verfügbarem Free-Angebot stoppen, keine bezahlte Alternative buchen. Bestehende Datenbanken anderer Projekte nicht wiederverwenden. Das erzeugte Secret nur im Anbieter/Vercel konfigurieren, nicht in Chat oder GitHub posten.
-
-Migration `packages/db/migrations/0001_identity.sql` ist vorbereitet, aber wird nicht automatisch ausgeführt. Vor Aktivierung: Datenbank verbinden, etablierten OIDC-Login und serverseitige Sessions implementieren, Rollen/RLS mit zwei echten Test-Tenants verifizieren. Dann Migration mit eigenem Migrationszugang ausführen; Anwendungsrolle ohne BYPASSRLS/Superuser einsetzen.
-
-## Betrieb vor Pilot
-
-Keine echten Betriebsdaten vor Authentifizierung und dem getesteten Buchungskern. Backup-/Restore-Verfahren und die tatsächlich im kostenlosen Tarif verfügbaren Aufbewahrungsgrenzen prüfen. Vollständige Produktionsabnahme nach Abschnitt 11 und 13 der Produktspezifikation.
+Für einen neuen Betrieb als normaler Benutzer registrieren; keine Testpasswörter oder gemeinsamen Administratorzugänge. Weitere Mitglieder registrieren sich und geben ihre Benutzer-ID aus „Betrieb & Sicherheit“ an die Betriebsleitung weiter. Einen externen Versanddienst erst nach gesonderter Konfiguration aktivieren.

@@ -1,3 +1,3 @@
-# API-Verträge — geplant
+# API-Verträge
 
-OpenAPI 3.1 und Laufzeitschemas vor Einführung der Bestands-API. Dezimalwerte als Strings; Command-ID, Idempotency-Key und expected_version. Server löst Tenant aus authentifizierter Membership auf.
+Laufzeitvalidierung: `apps/web/src/lib/server/contracts.ts` (Zod). Generierter OpenAPI-3.1-Vertrag: `openapi.json`. Dezimalwerte bleiben Strings; Idempotency-Key steht im Header, erwartete Version im Command. Browser-Tenant und -Actor werden niemals als Identitätsnachweis akzeptiert. Import/Export und Integrationszugriffe haben eigene geschützte Endpunkte.

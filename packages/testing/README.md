@@ -1,3 +1,3 @@
-# Synthetische Fixtures
+# Abnahme
 
-Planungsbeispiel: Quelle A 1.200 L, 12 % vol, 2 €/L; Quelle B 900 L, 13,5 % vol, 3 €/L. Rezept 600/400 L → 250-ml-Versuch 150/100 ml. Keine realen Kunden-/Weingutsdaten. Domain-Tests unter `packages/domain/test`.
+`packages/db/scripts/verify.mjs`: reale PostgreSQL-Buchungen, Parallelität, RLS, Herkunft, Teilproduktion, Verluste, Abfüllung und ERP-Abgleich. `scripts/e2e.mjs`: echter Chromium-Browser mit Better-Auth-Registrierung/MFA und vollständigem Fachablauf, vier Sprachen, private Dateien, Tenantisolation und Offline-Konflikten. Testbetriebe/Konten sind isoliert und verwenden `example.invalid`. Domain-Rechenprüfungen liegen unter `packages/domain/test/`.

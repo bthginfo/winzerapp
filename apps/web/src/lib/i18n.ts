@@ -2,7 +2,7 @@ export const languages = ['de', 'en', 'it', 'fr'] as const;
 export type Language = typeof languages[number];
 const de = {
   language: 'Sprache', title: 'Vom Weinberg bis zur Flasche.', subtitle: 'Dein Betrieb. Eine gemeinsame Herkunftskette.',
-  foundation: 'Projektbasis', notice: 'Erste Projektbasis mit synthetischen Beispieldaten. Keine produktiven Bestandsbuchungen. Anmeldung und Buchungskern folgen vor dem Pilotbetrieb.',
+  foundation: 'Projektbasis', notice: 'Öffentliches Beispielstudio mit synthetischen Daten. Melde dich für deinen Betrieb, echte Bestände und Produktionsabläufe an.',
   cellar: 'Keller', blending: 'Cuvée-Studio', roadmap: 'Ausbau', lots: 'Beispielpartien', available: 'Verfügbar', vintage: 'Jahrgang',
   heading: 'Eine Idee wird zur Cuvée.', intro: 'Plane die Mischung und bereite einen reproduzierbaren 250-ml-Versuch vor.',
   source: 'Quelle', volume: 'Menge in Liter', cost: 'Weinkosten', total: 'Zielmenge', alcohol: 'Alkohol · Schätzung', perLiter: 'Kosten pro Liter',
@@ -22,7 +22,7 @@ export const messages: Record<Language, Dictionary> = {
   de,
   en: {
     language: 'Language', title: 'From vineyard to bottle.', subtitle: 'Your winery. One shared chain of origin.',
-    foundation: 'Project foundation', notice: 'Initial project foundation with synthetic example data. No production inventory transactions. Sign-in and the inventory core will follow before the pilot.',
+    foundation: 'Project foundation', notice: 'Public example studio with synthetic data. Sign in for your winery, actual stock and production workflows.',
     cellar: 'Cellar', blending: 'Blend studio', roadmap: 'Roadmap', lots: 'Example lots', available: 'Available', vintage: 'Vintage',
     heading: 'Turn an idea into a blend.', intro: 'Plan your blend and prepare a reproducible 250 ml bench trial.',
     source: 'Source', volume: 'Volume in litres', cost: 'Wine cost', total: 'Target volume', alcohol: 'Alcohol · estimate', perLiter: 'Cost per litre',
@@ -39,7 +39,7 @@ export const messages: Record<Language, Dictionary> = {
   },
   it: {
     language: 'Lingua', title: 'Dal vigneto alla bottiglia.', subtitle: 'La tua cantina. Una filiera di origine condivisa.',
-    foundation: 'Base del progetto', notice: 'Prima base del progetto con dati sintetici di esempio. Nessun movimento di magazzino reale. Accesso e gestione delle scorte seguiranno prima del progetto pilota.',
+    foundation: 'Base del progetto', notice: 'Studio pubblico con dati sintetici. Accedi per la tua azienda, le scorte reali e la produzione.',
     cellar: 'Cantina', blending: 'Studio assemblaggi', roadmap: 'Sviluppo', lots: 'Partite di esempio', available: 'Disponibile', vintage: 'Annata',
     heading: 'Da un’idea a un assemblaggio.', intro: 'Pianifica la miscela e prepara una prova riproducibile da 250 ml.',
     source: 'Origine', volume: 'Quantità in litri', cost: 'Costo del vino', total: 'Volume obiettivo', alcohol: 'Alcol · stima', perLiter: 'Costo al litro',
@@ -56,7 +56,7 @@ export const messages: Record<Language, Dictionary> = {
   },
   fr: {
     language: 'Langue', title: 'De la vigne à la bouteille.', subtitle: 'Votre domaine. Une chaîne d’origine commune.',
-    foundation: 'Base du projet', notice: 'Première base du projet avec des données synthétiques. Aucun mouvement de stock réel. La connexion et la gestion des stocks suivront avant le pilote.',
+    foundation: 'Base du projet', notice: 'Studio public avec des données synthétiques. Connectez-vous pour votre domaine, vos stocks réels et la production.',
     cellar: 'Cave', blending: 'Studio d’assemblage', roadmap: 'Évolution', lots: 'Lots d’exemple', available: 'Disponible', vintage: 'Millésime',
     heading: 'D’une idée à un assemblage.', intro: 'Planifiez votre assemblage et préparez un essai reproductible de 250 ml.',
     source: 'Origine', volume: 'Volume en litres', cost: 'Coût du vin', total: 'Volume cible', alcohol: 'Alcool · estimation', perLiter: 'Coût par litre',

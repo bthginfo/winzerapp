@@ -1,8 +1,9 @@
 import Decimal from 'decimal.js';
+Decimal.set({precision:50});
 
 export type Source = {
   id: string; volume: string; available: string; cost: string;
-  alcohol: string | null; method: string | null; blocked: boolean;
+  alcohol: string | null; unit: string | null; method: string | null; blocked: boolean;
 };
 export type Blend = {
   volume: string; cost: string; costPerLiter: string;
@@ -30,7 +31,7 @@ export function planBlend(sources: Source[], sampleMl = '250'): Blend {
     if (volumes[i].greaterThan(decimal(s.available))) throw new Error('INSUFFICIENT_STOCK');
   });
   const cost = used.reduce((sum, s, i) => sum.plus(volumes[i].times(decimal(s.cost))), new Decimal(0));
-  const comparable = used.every(s => s.alcohol !== null && s.method !== null && s.method === used[0].method);
+  const comparable = used.every(s => s.alcohol !== null && s.method !== null && s.method === used[0].method && s.unit!==null && s.unit === used[0].unit);
   const alcohol = comparable
     ? used.reduce((sum, s, i) => sum.plus(volumes[i].times(decimal(s.alcohol!))), new Decimal(0)).div(total).toFixed(2)
     : null;

@@ -2,8 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { planBlend, type Source } from '../src/blending.js';
 const sources: Source[] = [
-  { id: 'A', volume: '600', available: '1200', cost: '2', alcohol: '12', method: 'example-compatible', blocked: false },
-  { id: 'B', volume: '400', available: '900', cost: '3', alcohol: '13.5', method: 'example-compatible', blocked: false }
+  { id: 'A', volume: '600', available: '1200', cost: '2', alcohol: '12', unit: '% vol', method: 'example-compatible', blocked: false },
+  { id: 'B', volume: '400', available: '900', cost: '3', alcohol: '13.5', unit: '% vol', method: 'example-compatible', blocked: false }
 ];
 test('specification 60/40 example and 250 ml trial', () => {
   const r = planBlend(sources);
@@ -15,6 +15,8 @@ test('specification 60/40 example and 250 ml trial', () => {
 test('missing and incompatible analyses never become zero', () => {
   assert.equal(planBlend(sources.map(s => ({ ...s, alcohol: null }))).alcohol, null);
   assert.equal(planBlend(sources.map((s, i) => ({ ...s, method: String(i) }))).alcohol, null);
+  assert.equal(planBlend(sources.map((s,i)=>({...s,unit:i?'g/L':'% vol'}))).alcohol,null);
+  assert.equal(planBlend(sources.map(s=>({...s,unit:null}))).alcohol,null);
 });
 test('blocked sources, unavailable volumes and duplicate references fail', () => {
   assert.throws(() => planBlend(sources.map(s => ({ ...s, blocked: true }))), /BLOCKED_SOURCE/);

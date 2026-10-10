@@ -10,12 +10,22 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",
-    "@vinea/domain": "workspace:*"
+    "@vinea/domain": "workspace:*",
+    "better-auth": "^1.7.7",
+    "drizzle-orm": "^0.45.4",
+    "exceljs": "^4.4.0",
+    "idb": "^8.0.4",
+    "papaparse": "^5.7.0",
+    "qrcode": "^1.5.4",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@sveltejs/adapter-vercel": "^6.3.0",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^6.0.0",
+    "@types/papaparse": "^5.5.2",
+    "@types/qrcode": "^1.5.6",
     "svelte": "^5.0.0",
     "svelte-check": "^4.0.0",
     "typescript": "^5.0.0",
