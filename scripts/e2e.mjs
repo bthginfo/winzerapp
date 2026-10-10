@@ -1,7 +1,8 @@
 import { chromium } from '../apps/web/node_modules/@playwright/test/index.mjs';
 import { randomUUID,createHmac } from 'node:crypto';
 import assert from 'node:assert/strict';
-const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH??'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+import {browserOptions} from './browser.mjs';
+const browser=await chromium.launch(browserOptions());
 const context=await browser.newContext();const page=await context.newPage();const base=process.env.E2E_URL??'http://localhost:5173';let passed=0;
 async function check(name,fn){await fn();console.log('PASS '+name);passed++;}
 async function api(path,body,method='POST',headers={}){return page.evaluate(async({path,body,method,headers})=>{const res=await fetch(path,{method,headers:{'content-type':'application/json',...headers},...(body?{body:JSON.stringify(body)}:{})});return {status:res.status,body:await res.json()};},{path,body,method,headers});}
@@ -46,4 +47,4 @@ try{
  await page.goto(base+'/app/cellar?lang=de');await page.screenshot({path:'/tmp/vinea-complete-mvp.png',fullPage:true});
  await check('logout clears private local drafts and rejects unauthenticated API',async()=>{page.on('dialog',dialog=>dialog.accept());await page.getByRole('button',{name:'Abmelden',exact:true}).click();await page.waitForURL('**/login');assert.equal((await context.request.get(base+'/api/model')).status(),401);const rows=await page.evaluate(()=>new Promise(resolve=>{const req=indexedDB.open('vinea-drafts-v1');req.onsuccess=()=>{const get=req.result.transaction('drafts').objectStore('drafts').getAll();get.onsuccess=()=>resolve(get.result);};}));assert.equal(rows.length,0);});
  console.log(`${passed} browser acceptance checks passed`);
-}finally{await browser.close();}
+}catch(cause){throw new Error(String(cause.message??cause).split('\n')[0]);}finally{await browser.close();}

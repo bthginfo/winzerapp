@@ -26,6 +26,12 @@ Prüfdatum: 10. Oktober 2026. Die Prüfungen verwenden echte Neon-PostgreSQL-Tra
 
 Zuerst `pnpm build`, anschließend mit den ignorierten lokalen Umgebungsdateien `pnpm preview:db` starten. Für Browserprüfungen bei anderem Port `E2E_URL=http://localhost:PORT` setzen. Chromium muss installiert sein. Die zusätzlichen DB-/Adapter-/Restore-Skripte benötigen dieselben lokalen DB-Variablen wie die dokumentierten DB-Prüfungen; Restore zusätzlich `BACKUP_KEY` aus `.env.backup.local`. Restore legt eine eigene temporäre logische Datenbank an und entfernt ausschließlich diese nach Abschluss. Während des Tabellenvergleichs keine anderen Fixture-Schreiber ausführen.
 
+Bei externen URLs berücksichtigt der Browser-Test `HTTPS_PROXY`/`HTTP_PROXY` auch für seine API-Requests. Explizit über `NODE_EXTRA_CA_CERTS` vertraute Zertifikate werden anhand ihrer öffentlichen Schlüsselfingerprints in Chromium übernommen; andere Zertifikatsfehler werden nicht pauschal deaktiviert. Fehlerausgaben enthalten keine Request-Header oder Sitzungscookies.
+
+## Live-Prüfung
+
+Die stabile Produktionsadresse https://winzerapp.vercel.app wurde mit dem Anwendungsstand `13c0c251578c929d5f88e540bbd001b48da59add` / Vercel-Deployment `dpl_26ydTgkDBzNugqJzCSK4tRXoVr9w` (READY) geprüft. GitHub CI für diesen Stand ist erfolgreich. Öffentlicher Login DE/EN/IT/FR, Healthcheck über die Laufzeitrolle, neue Modul-Assets und 401 ohne App-Sitzung/Cron-Schlüssel bestehen. Zusätzlich bestehen **alle 16 ursprünglichen und alle 14 erweiterten Browserprüfungen gegen Produktion**, einschließlich OCR, echtem DWD-Abruf, MFA, vollständigem Mengenablauf, Einladungen, 52 Modul-/Sprachansichten und Offline-Dateien. Die anschließenden Änderungen an Testharness und Dokumentation verändern den Anwendungscode nicht.
+
 ## Grenzen des Nachweises
 
 OpenAI und SMTP sind mangels kundenseitigem Zugang nicht live aktiviert oder als produktiv zugestellt getestet. Die ERP-Schreibprüfung nutzt einen synthetischen Anbieter-Vertrag und echte DB-Zustände; echte Herstellerzugänge müssen entsprechend ihrer freigegebenen API geprüft werden. Regionales Recht wird nicht aus Beispielregeln abgeleitet. Sprachaufnahme hängt von Browser und dessen Sprachdienst ab. Physische Smartphone-Piloten, fachliche Übersetzungsprüfung und önologische/regulatorische Abnahme erfordern die beteiligten Menschen und Geräte. Diese Aktivierungs- und Abnahmepunkte sind in [feature-status.md](feature-status.md) und [backlog.md](backlog.md) beschrieben.
