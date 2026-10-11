@@ -44,6 +44,8 @@ Der Browser-Test durchläuft Registrierung, MFA, Import, Versuch, Freigabe, Prod
 
 [Testnachweis](docs/verification.md) · [Betrieb und Grenzen](docs/operations.md) · [Bedienung](docs/user-guide.md) · [Deployment](docs/deployment.md) · [Architektur](docs/architecture.md) · [API-Vertrag](packages/contracts/openapi.json).
 
+Ein eigener Demo-Betrieb mit Beispieldaten für alle Module kann über `scripts/seed-demo.mjs` angelegt werden. [Demo-Rundgang und sichere Einrichtung](docs/demo-guide.md) beschreiben die Beispiele, Owner-Rechte, MFA und die Wiederaufnahme eines unterbrochenen Seeds. Zugangspasswörter werden nie im Repository hinterlegt.
+
 Neon bleibt **Free in Frankfurt**. Es wurden keine kostenpflichtigen Datenbanktarife oder Zusatzdienste gewählt. Der bestehende Vercel-Teamtarif wird nicht geändert. OpenAI, SMTP und kundenspezifische ERP-API werden erst nach Zugangskonfiguration aktiv; Regelpakete benötigen reale fachliche Prüfung. Details in [Aktivierung](docs/backlog.md).
 
 Für Offline-Browsertests zuerst `pnpm build`, dann `pnpm preview:db` starten. Der Service Worker wird im Produktionsbuild registriert, nicht im Vite-Entwicklungsmodus. Die lokale Preview erhält dieselben Umgebungsvariablen wie die Datenbankanwendung.
