@@ -13,6 +13,6 @@ try{
  await owner`SELECT app.command(${tenant.id}::uuid,${auth.user.id},'pagination-cost-'||i,jsonb_build_object('type','cost_record','lot_id',${lot.id}::text,'category','work','amount','1','currency','EUR','basis','actual','description','Pagination fixture','invoice','')) FROM generate_series(1,501) g(i)`;
  const first=await(await context.request.get(base+'/api/read?collection=costs&limit=500')).json();assert.equal(first.rows.length,500);assert(first.next_cursor);
  const second=await(await context.request.get(base+'/api/read?collection=costs&limit=500&cursor='+first.next_cursor)).json();assert.equal(second.rows.length,1);assert.equal(second.next_cursor,null);
- await page.goto(base+'/app/costing?lang=en');const row=page.getByRole('row').filter({hasText:'C-PAGE'}).first();await row.waitFor();assert.equal(Number((await row.getByRole('cell').nth(4).innerText()).replaceAll(',','')),501);
+ await page.goto(base+'/app/costing?lang=en');await page.getByRole('button',{name:'Workspace',exact:true}).click();const row=page.getByRole('row').filter({hasText:'C-PAGE'}).first();await row.waitFor();assert.equal(Number((await row.getByRole('cell').nth(4).innerText()).replaceAll(',','')),501);
  console.log('PASS paginated API returns 500 + 1 rows while full cost includes all 501 entries');
 }catch(cause){throw new Error(String(cause.message??cause).split('\n')[0]);}finally{await browser.close();}

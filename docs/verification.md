@@ -35,3 +35,13 @@ Die stabile Produktionsadresse https://winzerapp.vercel.app wurde mit dem Anwend
 ## Grenzen des Nachweises
 
 OpenAI und SMTP sind mangels kundenseitigem Zugang nicht live aktiviert oder als produktiv zugestellt getestet. Die ERP-Schreibprüfung nutzt einen synthetischen Anbieter-Vertrag und echte DB-Zustände; echte Herstellerzugänge müssen entsprechend ihrer freigegebenen API geprüft werden. Regionales Recht wird nicht aus Beispielregeln abgeleitet. Sprachaufnahme hängt von Browser und dessen Sprachdienst ab. Physische Smartphone-Piloten, fachliche Übersetzungsprüfung und önologische/regulatorische Abnahme erfordern die beteiligten Menschen und Geräte. Diese Aktivierungs- und Abnahmepunkte sind in [feature-status.md](feature-status.md) und [backlog.md](backlog.md) beschrieben.
+
+## UI-/UX-Überarbeitung · 12. Oktober 2026
+
+Der geprüfte Produktionsbuild besteht `pnpm check` mit **0 Fehlern / 0 Warnungen**, die Domain-Tests und `pnpm build`. Gegen die lokale Produktions-Preview bestehen **16 ursprüngliche Browserprüfungen** und **7 neue UX-Prüfgruppen**. Diese prüfen alle 13 Module und die vier Sprachen, alle 39 deutschen Modul-/Ansicht-Kombinationen mit axe-core 4.10.3 (keine gefundenen WCAG-Regelverletzungen), Tastatur-Schnellzugriff, tatsächliche Sortierung und Filter-Rücksetzung, lokale Parzellen, simulierten HTTP-403 der Basiskarte, Origin-only-Referer, Mobilnavigation bei 390 px und einen tatsächlichen Task-Formularablauf bis zur Datenbank und zurück zur Aufgabenkarte. Browser-JavaScript-Fehler: **0**. Die erweiterten Fach-/Offline-Prüfungen bestehen mit **13 Prüffällen**; der optionale Live-Wettertest war in diesem Lauf deaktiviert.
+
+Der Map-Test zeigt: ohne Einwilligung keine Basiskarten-Kacheln; bei 403 keine Fehlerkacheln, Parzellen weiter sichtbar. Echte Basiskarten-Aufrufe senden ausschließlich die Origin und haben einen funktionierenden Fehlerzustand. Der Kartenservice wird nicht als garantiert verfügbar dargestellt. Demo-Zugänge wurden für die Prüfung nur gelesen; neue Aufgaben/Buchungen entstehen in gesonderten Testbetrieben.
+
+UX-Test: `E2E_URL=http://localhost:PORT node scripts/ux-e2e.mjs`. Optional `AXE_PATH` auf eine lokal installierte axe-core-Datei setzen; für lesende Ansichten des bestehenden Demo-Betriebs `DEMO_PASSWORD` ausschließlich im Prozessspeicher bereitstellen. Ohne Demo-Passwort registriert der Test einen separaten Testbetrieb. Keine Zugangsdaten, Browser-Sitzungen oder privaten Screenshots werden im Repository gespeichert.
+
+[Audit und Gestaltungsentscheidungen](design/ux-audit.md). Automatisierte axe-Prüfungen ersetzen keine manuelle Screenreader- oder Nutzungsstudie.

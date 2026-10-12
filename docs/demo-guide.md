@@ -6,12 +6,14 @@ Die Anmeldung verwendet eine E-Mail-Adresse und ein Passwort. Ein Anzeigename wi
 
 Unter **Betrieb & Sicherheit** einen eigenen Authenticator einrichten. Freigaben, Regeln, Teamverwaltung und Verbindungen benötigen MFA. Der Seed verwendet vorübergehend die reguläre MFA-Anmeldung und entfernt diesen Faktor anschließend; er hinterlegt weder gemeinsame Authenticator-Geheimnisse noch ein Passwort im Repository.
 
+Jedes Modul hat einen **Überblick**, einen **Arbeitsbereich** und ein **Register & Verlauf**. Aktionen stehen oben rechts; weitere Aktionen sind im Dialog auswählbar. Die Parzellenansicht arbeitet ohne externe Basiskarte.
+
 ## Rundgang
 
 | Modul | Beispiele und nächster Schritt |
 | --- | --- |
 | Heute | Offene, laufende und erledigte Aufgaben mit Checklisten. Mit „DEMO starten“ beginnen. Objektkarte auf dem eigenen Gerät speichern und anschließend die Offline-Seite öffnen. |
-| Weinberg | Drei Parzellen mit Polygonen, Saisons, Arbeiten, Bewässerung, Reifeproben und ausdrücklich synthetischem Wetter. Karte bewusst aktivieren; neue Reifeprobe ergänzen. |
+| Weinberg | Drei Parzellen mit Polygonen, Saisons, Arbeiten, Bewässerung, Reifeproben und ausdrücklich synthetischem Wetter. Optionale Straßenkarte bewusst laden; neue Reifeprobe ergänzen. |
 | Lese | Vorjahres-Herkunft, abgeschlossene Lesepläne, ein offener Termin und dokumentierte kg→L-Ausbeuten. Offenen Termin bearbeiten. |
 | Keller | Bewertete Grundweine, Moste, freie und gesperrte Tanks, Teilung, Rücktransfer, Verlust und Mengenjournal. QR und Herkunft öffnen. |
 | Cuvées | Drei fixierte Varianten mit echten 250-ml-Bestandsentnahmen und synthetischen Blindbewertungen. Eine Cuvée wurde produziert; ein Folgeauftrag ist freigegeben und reserviert. Außerdem gibt es einen bearbeitbaren Entwurf. |

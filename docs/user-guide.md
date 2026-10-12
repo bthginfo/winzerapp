@@ -1,5 +1,8 @@
 # Erster vollständiger Ablauf
 
+Jedes Modul bietet **Überblick**, **Arbeitsbereich** und **Register & Verlauf**. Die Hauptaktion steht oben rechts; **Alle Aktionen** öffnet den vollständigen Aktionskatalog in einem Dialog. Tabellen lassen sich filtern, sortieren und seitenweise lesen. **Schnellzugriff** oder `Strg/⌘ + K` findet Module und die auf der aktuellen Seite geladenen Objekte.
+
+
 1. **Anmeldung:** `/login`, Konto mit E-Mail/Passwort erstellen, Betrieb anlegen. Unter **Betrieb & Sicherheit** zweiten Faktor einrichten, Authenticator-Code bestätigen und Wiederherstellungscodes sicher aufbewahren. Deutsch/Englisch/Italienisch/Französisch sind in der Seitenleiste verfügbar.
 2. **Bestände:** Im Datenhub Beispiel-CSV wählen, Spalten zuordnen, Vorschau lesen, übernehmen. Fehler bleiben als einzelne Zeilenergebnisse sichtbar; dieselbe Datei erzeugt keinen zweiten Anfangsbestand. Alternativ Gefäß, Partie und Anfangsbestand im Keller anlegen. Liter mit Dezimalpunkt und höchstens drei Nachkommastellen eingeben.
 3. **Herkunft:** Optional Weinberg und Lese erfassen und beim Anlegen der Partie verknüpfen. Fehlende Weinberg-Herkunft wird als unbekannt ausgewiesen; importierte Rebsorte ist kein regionaler Rechtsnachweis.
@@ -19,7 +22,7 @@ Vor Offline-Arbeit die App online öffnen. Aufgaben, Notizen und Messwerte könn
 
 ## Zusätzliche Fachmodule
 
-Weinberg: Saison wählen, Arbeitsgang und Aufwand erfassen; bei Schutzmaßnahmen Quelle/Zulassung dokumentieren und fachlich freigeben. Reife und Lese: Proben aufnehmen, Teams/Ressourcen planen, tatsächlichen Wiegeeingang erfassen und eine kg→L-Transformation mit echter Ausbeute durchführen. Karte nur nach bewusster Aktivierung laden; GeoJSON für die ausgewählte Parzelle prüfen.
+Weinberg: Saison wählen, Arbeitsgang und Aufwand erfassen; bei Schutzmaßnahmen Quelle/Zulassung dokumentieren und fachlich freigeben. Reife und Lese: Proben aufnehmen, Teams/Ressourcen planen, tatsächlichen Wiegeeingang erfassen und eine kg→L-Transformation mit echter Ausbeute durchführen. Parzellen erscheinen zunächst ohne externe Kartenabrufe. Die optionale Straßenkarte bewusst laden; bei einem Kartendienst-Ausfall bleiben die Parzellen sichtbar. GeoJSON für die ausgewählte Parzelle prüfen.
 
 Labor: Gärlauf starten, Messwerte mit Methode/Einheit/Zeit aufnehmen, eigene Referenzregeln einstellen, Messverlauf und Hinweise prüfen. Sensortoken als Önologie/Betriebsleitung mit MFA erstellen und nur dem berechtigten Gateway geben.
 

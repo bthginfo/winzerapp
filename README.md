@@ -31,6 +31,8 @@ Für die vollständige Anwendung:
 
 Die Laufzeitanwendung verwendet `APP_DATABASE_URL` mit `NOSUPERUSER NOBYPASSRLS`, niemals den Eigentümerzugang. `DATABASE_URL` dient ausschließlich lokalen Migrationen/Verifikationen; auch `/api/health` prüft mit dem eingeschränkten Anwendungszugang.
 
+[UX-/UI-Audit und Gestaltungsentscheidungen](docs/design/ux-audit.md) dokumentieren die Modulübersichten, geführten Aktionen, Diagramme und Kartenbehandlung.
+
 ## Prüfung und Betrieb
 
 ```sh

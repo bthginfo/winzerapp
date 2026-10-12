@@ -58,7 +58,7 @@ const tables={
  notes:'SELECT id,lot_id,vineyard_id,body,captured_at,created_by FROM app.note ORDER BY captured_at DESC',
  ledger:'SELECT e.id,e.operation_id,e.position_id,e.lot_id,e.account,e.quantity_l::text,o.kind,o.occurred_at,o.recorded_at,o.actor_id,o.reason FROM app.ledger e JOIN app.operation o ON o.tenant_id=e.tenant_id AND o.id=e.operation_id ORDER BY o.recorded_at DESC',
  lineage:'SELECT parent_lot_id,child_lot_id,operation_id,contribution_l::text FROM app.lineage',
- members:'SELECT user_id,role,scope FROM app.membership ORDER BY created_at',
+ members:'SELECT m.user_id,u.name,m.role,m.scope FROM app.membership m JOIN public.auth_user u ON u.id=m.user_id ORDER BY m.created_at',
  outbox:'SELECT id,event_type,aggregate_id,status,attempts,available_at,last_error FROM app.outbox ORDER BY created_at DESC'
 };
 export type Model = Record<string,Record<string,any>[]>;
